@@ -60,14 +60,15 @@ describe('Testa os botões de navegação do App', () => {
       expect(aboutText).toBeInTheDocument();
     });
 
-    // it('Testa rota Favorite pokémons', () => {
-    //   const { getByRole, history } = renderWithRouter(<App />);
-    //   history.push('/favorites');
-    //   const aboutText = screen.getByRole('heading', {
-    //     level: 2,
-    //   });
-    //   expect(aboutText).toBeInTheDocument();
-    // });
+    it('Testa rota Favorite pokémons', () => {
+      const { getByRole, history } = renderWithRouter(<App />);
+      history.push('/favorites');
+      const aboutText = getByRole('heading', {
+        level: 2,
+        name: 'Favorite pokémons',
+      });
+      expect(aboutText).toBeInTheDocument();
+    });
 
     it('Testa rota não existente', () => {
       const { getByText, history } = renderWithRouter(<App />);
