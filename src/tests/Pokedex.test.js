@@ -9,6 +9,7 @@ describe('Testes componente Pokedex', () => {
   const isPokemonFavoriteById = [pokemons[0], pokemons[1]];
   const pokeName = 'pokemon-name';
   const nextPoke = 'Próximo pokémon';
+  const dataTestIdButton = 'pokemon-type-button';
 
   it('Testa o cabeçalho da aplicação', () => {
     const { getByRole } = renderWithRouter(
@@ -63,7 +64,7 @@ describe('Testes componente Pokedex', () => {
       />,
     );
     const types = 7;
-    const buttons = getAllByTestId('pokemon-type-button');
+    const buttons = getAllByTestId(dataTestIdButton);
     expect(buttons.length).toBe(types);
 
     const fireFilterBtn = getByText('Fire');
@@ -99,10 +100,25 @@ describe('Testes componente Pokedex', () => {
     const fireFilterBtn = getByText('Fire');
     userEvent.click(fireFilterBtn);
     userEvent.click(resetFilterBtn);
-    for(let index = 0; index < pokemons.length; index += 1) {
+    for (let index = 0; index < pokemons.length; index += 1) {
       const pokemonName = getByTestId(pokeName);
       expect(pokemonName.textContent).toBe(pokemons[index].name);
       userEvent.click(nextBtn);
     }
+  });
+
+  it('Testar geração dinâmica de pokemons', () => {
+    const fireAndBug = pokemons
+      .filter((pokemon) => pokemon.type === 'Bug' || pokemon.type === 'Fire');
+    const { getAllByTestId } = renderWithRouter(
+      <Pokedex
+        pokemons={ fireAndBug }
+        isPokemonFavoriteById={ isPokemonFavoriteById }
+      />,
+    );
+    const filterButtons = getAllByTestId(dataTestIdButton);
+    filterButtons.forEach((button, index) => {
+      expect(button.textContent).toBe(fireAndBug[index].type);
+    });
   });
 });
